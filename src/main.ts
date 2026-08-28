@@ -37,11 +37,12 @@ async function bootstrap() {
   // Baru setup Swagger ke path 'api'
   SwaggerModule.setup('api', app, document);
 
-  // 5. Jalankan Server di Port 3000
-  await app.listen(3000);
-  console.log('🚀 Server AffanStore berjalan di: http://localhost:3000');
-  console.log('📚 Dokumentasi Swagger: http://localhost:3000/api');
-  console.log('📁 Folder Static Assets: http://localhost:3000/uploads/');
+  // 5. Gunakan PORT dinamis dari Railway (Fallback ke 3000 jika dijalankan lokal)
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0');
+
+  console.log(`🚀 Server AffanStore berjalan di port: ${port}`);
+  console.log(`📚 Dokumentasi Swagger dapat diakses di path /api`);
 }
 
 void bootstrap();
