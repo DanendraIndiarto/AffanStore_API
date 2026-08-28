@@ -1,0 +1,25 @@
+{
+  "$schema": "https://railpack.com/schema.json",
+  "phases": {
+    "setup": {
+      "aptPkgs": ["openssl"]
+    },
+    "install": {
+      "cmds": ["npm install"]
+    },
+    "build": {
+      "cmds": [
+        "npx prisma generate",
+        "npm run build"
+      ]
+    }
+  },
+  "deploy": {
+    "startCmd": "npx prisma db push && npm run start:prod",
+    "inputs": {
+      "build": {
+        "include": ["dist", "node_modules", "prisma", "package.json"]
+      }
+    }
+  }
+}
