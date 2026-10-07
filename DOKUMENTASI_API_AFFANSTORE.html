@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi API AffanStore untuk Front End</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 14mm 12mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      background-color: #ffffff;
+      line-height: 1.55;
+      font-size: 11pt;
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Header styling */
+    .header {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .header-title h1 {
+      font-size: 22pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-title p {
+      color: #64748b;
+      font-size: 10.5pt;
+      margin-top: 4px;
+    }
+
+    .badge-doc {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-left: 4px solid #3b82f6;
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+
+    /* Overview Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      page-break-inside: avoid;
+    }
+
+    .card-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .card-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5pt;
+      color: #0f172a;
+      word-break: break-all;
+    }
+
+    /* Alert / Notice */
+    .alert-box {
+      background: #fefce8;
+      border-left: 4px solid #eab308;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: 9.5pt;
+      color: #713f12;
+      page-break-inside: avoid;
+    }
+
+    .alert-box strong {
+      color: #854d0e;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 16px 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #334155;
+      text-align: left;
+      font-weight: 700;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+    }
+
+    td {
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Endpoints Card */
+    .endpoint-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .endpoint-header {
+      background: #f8fafc;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .method {
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .method-get { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .method-post { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .method-patch { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .method-delete { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+    .route-path {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10pt;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .route-auth {
+      margin-left: auto;
+      font-size: 8pt;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .auth-public { background: #f1f5f9; color: #475569; }
+    .auth-user { background: #ede9fe; color: #6d28d9; }
+    .auth-admin { background: #fee2e2; color: #991b1b; }
+
+    .endpoint-body {
+      padding: 10px 12px;
+      background: #ffffff;
+      font-size: 9.5pt;
+    }
+
+    .endpoint-desc {
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    /* Code blocks */
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5pt;
+      overflow-x: auto;
+      margin: 6px 0;
+      line-height: 1.45;
+    }
+
+    .code-label {
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        <h1>AffanStore REST API</h1>
+        <p>Dokumentasi Teknis & Panduan Integrasi Front End • NestJS + Prisma ORM</p>
+      </div>
+      <div>
+        <span class="badge-doc">v1.0 Production Ready</span>
+      </div>
+    </div>
+
+    <!-- Overview Section -->
+    <div class="section">
+      <div class="section-title">1. Konfigurasi Lingkungan (Environment)</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Base URL API (Lokal)</div>
+          <div class="card-value">http://localhost:3000</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Dokumentasi Interaktif Swagger</div>
+          <div class="card-value">http://localhost:3000/api</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Static File Server (Gambar Produk)</div>
+          <div class="card-value">http://localhost:3000/uploads/&lt;filename&gt;</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Format Header Autentikasi</div>
+          <div class="card-value">Authorization: Bearer &lt;access_token&gt;</div>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <strong>Status CORS:</strong> Sudah diaktifkan secara global di backend (<code>app.enableCors()</code>). Front End (React / Next.js / Vue / Vite) dapat langsung melakukan request tanpa kendala cross-origin.
+      </div>
+    </div>
+
+    <!-- Data Types & Enums -->
+    <div class="section">
+      <div class="section-title">2. Master Data & Enums Acuan</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Nama Enum</th>
+            <th style="width: 35%;">Nilai yang Valid</th>
+            <th>Keterangan / Penggunaan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Role</strong></td>
+            <td><code>USER</code>, <code>ADMIN</code></td>
+            <td>Hak akses akun. Default saat registrasi adalah <code>USER</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>PaymentMethod</strong></td>
+            <td><code>CASH</code>, <code>QRIS</code></td>
+            <td>Metode pembayaran yang dipilih pembeli.</td>
+          </tr>
+          <tr>
+            <td><strong>ShippingType</strong></td>
+            <td><code>COD</code>, <code>NON_COD</code></td>
+            <td>Tipe pengiriman barang.</td>
+          </tr>
+          <tr>
+            <td><strong>OrderStatus</strong></td>
+            <td><code>PENDING</code>, <code>PAID</code>, <code>CANCELLED</code></td>
+            <td>Status perjalanan pesanan transaksi.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Business Rules -->
+    <div class="section">
+      <div class="section-title">3. Aturan Bisnis Penting (Business Rules)</div>
+      <div class="card" style="margin-bottom: 10px;">
+        <ul style="padding-left: 20px; font-size: 9.5pt; color: #334155;">
+          <li style="margin-bottom: 4px;"><strong>Sinkronisasi Pembayaran & Pengiriman:</strong>
+            <ul>
+              <li>Jika <code>paymentMethod: "CASH"</code>, maka <code>shippingType</code> <strong>WAJIB "COD"</strong>.</li>
+              <li>Jika <code>paymentMethod: "QRIS"</code>, maka <code>shippingType</code> <strong>WAJIB "NON_COD"</strong>.</li>
+              <li>Jika kombinasi tidak sesuai, backend akan mengembalikan error <code>400 Bad Request</code>.</li>
+            </ul>
+          </li>
+          <li style="margin-bottom: 4px;"><strong>Manajemen Stok Otomatis:</strong> Saat checkout berhasil, stok produk otomatis berkurang. Jika pesanan dibatalkan (oleh User atau Admin), stok akan di-restock (dikembalikan) otomatis ke database.</li>
+          <li><strong>Pembatalan Pesanan oleh User:</strong> User hanya dapat membatalkan pesanan miliknya yang masih berstatus <code>PENDING</code>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Modul Auth -->
+    <div class="section">
+      <div class="section-title">4. Modul Autentikasi (`/auth`)</div>
+
+      <!-- Register -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-post">POST</span>
+          <span class="route-path">/auth/register</span>
+          <span class="route-auth auth-public">PUBLIC</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Mendaftarkan akun customer baru ke dalam sistem.</div>
+          <div class="code-label">Request Body (application/json)</div>
+<pre>{
+  "name": "Budi Santoso",
+  "email": "budi@gmail.com",
+  "password": "rahasia123" // Min 6 karakter
+}</pre>
+          <div class="code-label">Response Sukses (201 Created)</div>
+<pre>{
+  "id": 1,
+  "name": "Budi Santoso",
+  "email": "budi@gmail.com",
+  "role": "USER",
+  "createdAt": "2026-10-06T06:00:00.000Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- Login -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-post">POST</span>
+          <span class="route-path">/auth/login</span>
+          <span class="route-auth auth-public">PUBLIC</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Autentikasi akun dan mendapatkan JWT Token untuk request selanjutnya.</div>
+          <div class="code-label">Request Body (application/json)</div>
+<pre>{
+  "email": "budi@gmail.com",
+  "password": "rahasia123"
+}</pre>
+          <div class="code-label">Response Sukses (200 OK)</div>
+<pre>{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "name": "Budi Santoso",
+    "email": "budi@gmail.com",
+    "role": "USER"
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modul Produk -->
+    <div class="section">
+      <div class="section-title">5. Modul Produk (`/products`)</div>
+
+      <!-- List Produk -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-get">GET</span>
+          <span class="route-path">/products</span>
+          <span class="route-auth auth-public">PUBLIC</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Menampilkan seluruh katalog produk diurutkan dari yang terbaru.</div>
+          <div class="code-label">Response Sukses (200 OK)</div>
+<pre>[
+  {
+    "id": 1,
+    "name": "Sepatu Running Adidas",
+    "description": "Sepatu lari sol empuk dan ringan",
+    "price": 650000,
+    "category": "Sepatu",
+    "stock": 10,
+    "imageUrl": "/uploads/product-171800000-12345.jpg",
+    "isActive": true,
+    "createdAt": "2026-10-06T06:00:00.000Z",
+    "updatedAt": "2026-10-06T06:00:00.000Z"
+  }
+]</pre>
+        </div>
+      </div>
+
+      <!-- Detail Produk -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-get">GET</span>
+          <span class="route-path">/products/:id</span>
+          <span class="route-auth auth-public">PUBLIC</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Menampilkan detail satu produk spesifik berdasarkan ID.</div>
+        </div>
+      </div>
+
+      <!-- Tambah Produk -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-post">POST</span>
+          <span class="route-path">/products</span>
+          <span class="route-auth auth-admin">ADMIN ONLY</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Menambahkan produk baru. Gunakan format form-data untuk mengunggah gambar.</div>
+          <div class="code-label">Header: Content-Type: multipart/form-data</div>
+          <div class="code-label">Form-Data Fields:</div>
+          <ul style="padding-left: 20px; font-size: 9pt; color: #334155; margin-bottom: 4px;">
+            <li><code>name</code> (text, wajib): Nama produk</li>
+            <li><code>price</code> (text/number, wajib): Harga produk (integer &ge; 0)</li>
+            <li><code>category</code> (text, wajib): Kategori produk</li>
+            <li><code>stock</code> (text/number, wajib): Jumlah stok (integer &ge; 0)</li>
+            <li><code>description</code> (text, opsional): Deskripsi lengkap produk</li>
+            <li><code>image</code> (file binary, opsional): File gambar (jpg, png, jpeg)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Update & Delete Produk -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-patch">PATCH</span>
+          <span class="route-path">/products/:id</span>
+          <span class="route-auth auth-admin">ADMIN ONLY</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Mengubah data produk & mengganti gambar (Content-Type: multipart/form-data).</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-delete">DELETE</span>
+          <span class="route-path">/products/:id</span>
+          <span class="route-auth auth-admin">ADMIN ONLY</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Menghapus data produk dari sistem berdasarkan ID.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Modul Orders -->
+    <div class="section">
+      <div class="section-title">6. Modul Pemesanan & Transaksi (`/orders`)</div>
+
+      <!-- Checkout -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-post">POST</span>
+          <span class="route-path">/orders</span>
+          <span class="route-auth auth-user">USER LOGIN</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Membuat order / transaksi checkout baru (stok otomatis dipotong).</div>
+          <div class="code-label">Request Body (application/json)</div>
+<pre>{
+  "productId": 1,
+  "quantity": 2,
+  "paymentMethod": "QRIS",   // "CASH" atau "QRIS"
+  "shippingType": "NON_COD"  // Wajib "NON_COD" jika QRIS; Wajib "COD" jika CASH
+}</pre>
+          <div class="code-label">Response Sukses (201 Created)</div>
+<pre>{
+  "id": 15,
+  "userId": 1,
+  "totalAmount": 1300000,
+  "status": "PENDING",
+  "paymentMethod": "QRIS",
+  "shippingType": "NON_COD",
+  "createdAt": "2026-10-06T06:15:00.000Z",
+  "orderItems": [
+    {
+      "id": 20,
+      "productId": 1,
+      "quantity": 2,
+      "price": 650000,
+      "product": {
+        "id": 1,
+        "name": "Sepatu Running Adidas",
+        "imageUrl": "/uploads/product-171800000-12345.jpg"
+      }
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+
+      <!-- Riwayat User -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-get">GET</span>
+          <span class="route-path">/orders</span>
+          <span class="route-auth auth-user">USER LOGIN</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Menampilkan daftar seluruh riwayat pesanan milik user yang sedang login.</div>
+        </div>
+      </div>
+
+      <!-- Detail Order -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-get">GET</span>
+          <span class="route-path">/orders/:id</span>
+          <span class="route-auth auth-user">USER / ADMIN</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Melihat detail 1 pesanan (hanya bisa dibuka oleh pemilik order atau admin).</div>
+        </div>
+      </div>
+
+      <!-- Cancel Order -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-patch">PATCH</span>
+          <span class="route-path">/orders/:id/cancel</span>
+          <span class="route-auth auth-user">PEMILIK ORDER</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Membatalkan pesanan sendiri jika status masih <code>PENDING</code>. Stok produk otomatis dikembalikan.</div>
+        </div>
+      </div>
+
+      <!-- Admin List All Orders -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-get">GET</span>
+          <span class="route-path">/orders/admin/all</span>
+          <span class="route-auth auth-admin">ADMIN ONLY</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Melihat semua pesanan dari seluruh pelanggan (dilengkapi detail user & barang).</div>
+        </div>
+      </div>
+
+      <!-- Admin Update Status -->
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method method-patch">PATCH</span>
+          <span class="route-path">/orders/:id/status</span>
+          <span class="route-auth auth-admin">ADMIN ONLY</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="endpoint-desc">Mengubah status pesanan oleh admin (contoh: konfirmasi bayar / pembatalan).</div>
+          <div class="code-label">Request Body (application/json)</div>
+<pre>{
+  "status": "PAID" // Pilihan: "PENDING", "PAID", "CANCELLED"
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modul Users -->
+    <div class="section">
+      <div class="section-title">7. Modul Pengguna (`/users`)</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 14%;">Method</th>
+            <th style="width: 26%;">Endpoint</th>
+            <th style="width: 20%;">Akses</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/users</code></td>
+            <td><span class="route-auth auth-admin">ADMIN ONLY</span></td>
+            <td>Menampilkan daftar semua pengguna terdaftar.</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/users</code></td>
+            <td><span class="route-auth auth-admin">ADMIN ONLY</span></td>
+            <td>Membuat pengguna baru secara langsung dari dashboard admin.</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/users/:id</code></td>
+            <td><span class="route-auth auth-user">USER / ADMIN</span></td>
+            <td>Melihat detail profil pengguna berdasarkan ID.</td>
+          </tr>
+          <tr>
+            <td><span class="method method-patch">PATCH</span></td>
+            <td><code>/users/:id</code></td>
+            <td><span class="route-auth auth-user">USER / ADMIN</span></td>
+            <td>Update data profil (nama, email, atau ganti password).</td>
+          </tr>
+          <tr>
+            <td><span class="method method-delete">DELETE</span></td>
+            <td><code>/users/:id</code></td>
+            <td><span class="route-auth auth-admin">ADMIN ONLY</span></td>
+            <td>Menghapus akun pengguna dari database.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</body>
+</html>

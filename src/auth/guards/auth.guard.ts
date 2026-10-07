@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-        secret: 'SECRET_KEY_AFFAN_STORE', // Nanti bisa disesuaikan dengan process.env.JWT_SECRET
+        secret: process.env.JWT_SECRET || 'SECRET_KEY_AFFAN_STORE',
       });
 
       // Simpan payload user ke objek request
