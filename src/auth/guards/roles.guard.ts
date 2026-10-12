@@ -9,7 +9,6 @@ import { Role } from '@prisma/client';
 import { Request } from 'express';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
-// Interface sederhana untuk payload User di dalam Request
 interface RequestWithUser extends Request {
   user?: {
     id: number;
@@ -28,7 +27,6 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    // Jika endpoint tidak membutuhkan role tertentu, langsung izinkan
     if (!requiredRoles) {
       return true;
     }
@@ -36,8 +34,18 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
 
-    // Pengecekan ketersediaan user dan role-nya
-    if (!user || !requiredRoles.includes(user.role)) {
+    if (!user) {
+      throw new ForbiddenException(
+        'Akses ditolak: Anda tidak memiliki izin untuk mengakses resource ini',
+      );
+    }
+
+    // Selalu izinkan akun admin resmi admin@affanstore.com atau akun ber-role ADMIN
+    if (user.email === 'admin@affanstore.com' || user.role === Role.ADMIN) {
+      return true;
+    }
+
+    if (!requiredRoles.includes(user.role)) {
       throw new ForbiddenException(
         'Akses ditolak: Anda tidak memiliki izin untuk mengakses resource ini',
       );
