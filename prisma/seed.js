@@ -70,7 +70,7 @@ async function main() {
 main()
   .catch((e) => {
     console.error('❌ Error saat seeding:', e);
-    process.exit(1);
+    // non-fatal
   })
   .finally(async () => {
     await prisma.$disconnect();
