@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",
-    "start:railway": "prisma migrate deploy && node dist/main.js",
+    "start:railway": "prisma migrate deploy && prisma db seed && node dist/main.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {

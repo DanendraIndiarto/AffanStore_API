@@ -5,38 +5,32 @@ const prisma = new PrismaClient();
 
 async function main() {
   const adminEmail = 'admin@affanstore.com';
+  const hashedPassword = await bcrypt.hash('admin123', 10);
 
-  // 1. Cek apakah admin sudah ada di database
-  const existingAdmin = await prisma.user.findUnique({
+  // Gunakan upsert agar jika sudah ada, role langsung diubah menjadi ADMIN
+  const admin = await prisma.user.upsert({
     where: { email: adminEmail },
+    update: {
+      role: Role.ADMIN,
+      password: hashedPassword,
+    },
+    create: {
+      name: 'Super Admin',
+      email: adminEmail,
+      password: hashedPassword,
+      role: Role.ADMIN,
+    },
   });
 
-  if (!existingAdmin) {
-    // 2. Hash password default admin
-    const hashedPassword = await bcrypt.hash('admin123', 10);
-
-    // 3. Buat akun Super Admin baru
-    const admin = await prisma.user.create({
-      data: {
-        name: 'Super Admin',
-        email: adminEmail,
-        password: hashedPassword,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-        role: Role.ADMIN,
-      },
-    });
-
-    console.log('✅ Admin berhasil dibuat:', admin.email);
-  } else {
-    console.log('ℹ️ Admin sudah ada di database.');
-  }
+  console.log('✅ Akun Admin Siap:', admin.email, 'Role:', admin.role);
 }
 
 main()
   .catch((e: unknown) => {
-    console.error('❌ Terjadi kesalahan saat seeding:', e);
+    console.error('Error saat seeding:', e);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
   });
+
